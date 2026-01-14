@@ -1,5 +1,6 @@
 package paradigmesdeprogrammation.projetnfp121.services;
 
+import org.springframework.stereotype.Service;
 import paradigmesdeprogrammation.projetnfp121.entities.Matiere;
 import paradigmesdeprogrammation.projetnfp121.repositories.DevoirRepository;
 import paradigmesdeprogrammation.projetnfp121.repositories.MatiereRepository;
@@ -7,6 +8,7 @@ import paradigmesdeprogrammation.projetnfp121.repositories.MatiereRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MatiereService {
 
     private final MatiereRepository matiereRepository;

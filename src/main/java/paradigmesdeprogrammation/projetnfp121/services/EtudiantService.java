@@ -1,41 +1,35 @@
 package paradigmesdeprogrammation.projetnfp121.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 import paradigmesdeprogrammation.projetnfp121.entities.Etudiant;
+import paradigmesdeprogrammation.projetnfp121.entities.Matiere;
 import paradigmesdeprogrammation.projetnfp121.repositories.EtudiantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController
-@RequestMapping("/etudiants")
+@Service
 public class EtudiantService {
 
-    @Autowired private EtudiantRepository etudiantRepository;
+    private final EtudiantRepository etudiantRepository;
 
-    @GetMapping("/")
-    List<Etudiant> getAllEtudiants()    {
-      return etudiantRepository.findAll();
+    public EtudiantService(EtudiantRepository etudiantRepository) {
+        this.etudiantRepository = etudiantRepository;
     }
 
-    @GetMapping("/{id}")
-    Etudiant getEtudiantById(@PathVariable Long id) {
-        return etudiantRepository.findById(id).orElse(null);
+    public List<Etudiant> findAll() {
+        return etudiantRepository.findAll();
     }
 
-    @GetMapping("/classe/{classe_id}")
-    List<Etudiant> getEtudiantsByClasse(@PathVariable Long classe_id) {
-        return etudiantRepository.getEtudiantsByClasse_Id(classe_id);
+    public Optional<Etudiant> findById(Long id) {
+        return etudiantRepository.findById(id);
     }
 
-    @GetMapping("/disponible")
-    List<Etudiant> getEtudiantsDisponible() {
-        return getEtudiantsByClasse(null);
+    public Etudiant save(Etudiant e) {
+        return etudiantRepository.save(e);
     }
 
-    @PostMapping("/add")
-    void addEtudiant(@RequestBody Etudiant etudiant) {
-        etudiantRepository.save(etudiant);
-    }
+
+
 
 }

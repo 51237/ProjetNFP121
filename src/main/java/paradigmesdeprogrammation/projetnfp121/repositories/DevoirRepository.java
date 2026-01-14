@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface DevoirRepository extends JpaRepository<Devoir, Long> {
 
+    void deleteByIdclasse_Id(Long idClasse);
+
     List<Devoir> findDevoirByIdclasse(Classe idclasse);
 
     List<Devoir> findDevoirByIdmatiere(Matiere idmatiere);

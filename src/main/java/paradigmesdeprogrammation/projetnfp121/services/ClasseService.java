@@ -1,13 +1,12 @@
 package paradigmesdeprogrammation.projetnfp121.services;
 
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import paradigmesdeprogrammation.projetnfp121.entities.Classe;
-import paradigmesdeprogrammation.projetnfp121.repositories.ClasseRepository;
-import paradigmesdeprogrammation.projetnfp121.repositories.EtudiantRepository;
-import paradigmesdeprogrammation.projetnfp121.repositories.MatiereRepository;
-import paradigmesdeprogrammation.projetnfp121.repositories.NotationRepository;
+import paradigmesdeprogrammation.projetnfp121.repositories.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,20 +16,25 @@ public class ClasseService {
     private final ClasseRepository classeRepository;
     private final EtudiantRepository etudiantRepository;
     private final NotationRepository notationRepository;
+    private final DevoirRepository devoirRepository;
 
-    public ClasseService(ClasseRepository classeRepository, EtudiantRepository etudiantRepository, NotationRepository notationRepository ) {
+    public ClasseService(ClasseRepository classeRepository, EtudiantRepository etudiantRepository, NotationRepository notationRepository, DevoirRepository devoirRepository) {
         this.classeRepository = classeRepository;
         this.etudiantRepository = etudiantRepository;
         this.notationRepository = notationRepository;
+        this.devoirRepository = devoirRepository;
     }
 
-    public List<Classe> findAll() { return classeRepository.findAll();}
+    public List<Classe> findAll() {
+        return classeRepository.findAll();
+    }
 
     public Optional<Classe> findById(Long id) {
         return classeRepository.findById(id);
     }
 
-    public Classe save(Classe c) {return classeRepository.save(c);
+    public Classe save(Classe c) {
+        return classeRepository.save(c);
     }
 
     @Transactional
@@ -39,5 +43,19 @@ public class ClasseService {
         classeRepository.deleteById(id);
     }
 
+    @Transactional
+    public void deleteClasseAndClearEtudiant(Long classeId) {
+
+        Classe classe = classeRepository.findById(classeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Classe not found"));
+
+        etudiantRepository.detachementEtudiantsFromClasse(classeId);
+
+        devoirRepository.deleteByIdclasse_Id(classeId);
+
+        classeRepository.delete(classe);
+
+
+    }
 
 }

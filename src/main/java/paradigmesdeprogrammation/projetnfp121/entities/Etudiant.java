@@ -23,6 +23,6 @@ public class Etudiant {
 //    private String photo;
 
     @ManyToOne(fetch = FetchType. EAGER)
-    @JoinColumn(name = "idclasse", nullable = false)
+    @JoinColumn(name = "idclasse", nullable = true)
     private Classe classe;
 }

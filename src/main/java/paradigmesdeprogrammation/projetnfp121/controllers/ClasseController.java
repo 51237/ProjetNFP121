@@ -59,11 +59,11 @@ public class ClasseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEtudiant(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteClasse(@PathVariable Long id) {
         if (classeService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        classeService.deleteEtudiantAvecNotes(id);
+        classeService.deleteClasseAndClearEtudiant(id);
         return ResponseEntity.noContent().build();
     }
 }

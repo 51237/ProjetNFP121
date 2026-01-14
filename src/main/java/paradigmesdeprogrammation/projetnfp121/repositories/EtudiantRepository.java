@@ -14,4 +14,7 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
     @Override
     Optional<Etudiant> findById(Long id);
+
+    List<Etudiant> findByClasseIsNull();
+
 }

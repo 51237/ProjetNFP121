@@ -1,0 +1,25 @@
+package paradigmesdeprogrammation.projetnfp121.entities;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Entity
+public class Etudiant {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String nom;
+
+    @Column(nullable = false)
+    private String prenom;
+
+//    private String photo;
+
+    @ManyToOne(fetch = FetchType. EAGER)
+    @JoinColumn(name = "idclasse", nullable = false)
+    private Classe classe;
+}

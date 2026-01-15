@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier Etudiant</title>
+</head>
+<body>
+
+<h1>Modifier un Etudiant</h1>
+
+<form th:action="@{/etudiants/{id}/edit(id=${etudiant.id})}" method="post">
+
+    <p>
+        <label>Nom :</label>
+        <input type="text" name="nom" th:value="${etudiant.nom}" required>
+    </p>
+
+    <p>
+        <label>Prénom :</label>
+        <input type="text" name="prenom" th:value="${etudiant.prenom}" required>
+    </p>
+
+    <p th:if="${hasNotes}" style="color:red;">
+        Attention : au moins une note existe. Vous ne pouvez pas modifier la classe.
+    </p>
+
+    <p th:if="${!hasNotes}">
+        <label>Classe :</label>
+        <select name="classeId">
+            <option value="">Aucune</option>
+
+            <option th:each="c : ${classes}"
+                    th:value="${c.id}"
+                    th:text="${c.denomination}"
+                    th:selected="${etudiant.idclasse != null and etudiant.idclasse.id == c.id}">
+            </option>
+        </select>
+    </p>
+
+    <p th:if="${hasNotes}">
+        <label>Classe :</label>
+        <span th:text="${etudiant.idclasse != null ? etudiant.idclasse.denomination : 'Aucune'}"></span>
+    </p>
+
+    <button type="submit">Enregistrer</button>
+    <a th:href="@{/etudiants}">Annuler</a>
+</form>
+
+</body>
+</html>

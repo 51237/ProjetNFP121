@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relevé de notes</title>
+</head>
+<body>
+
+<h1>Relevé de notes</h1>
+
+<h2 th:text="${bulletin.nom} + ' ' + ${bulletin.prenom}"></h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Matière</th>
+        <th>Moyenne</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="m : ${bulletin.moyenneParMatiere}">
+        <td th:text="${m.key}"></td>
+        <td th:text="${m.value}"></td>
+    </tr>
+
+    <tr th:if="${#maps.isEmpty(bulletin.moyenneParMatiere)}">
+        <td colspan="2">Aucune note.</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    Moyenne générale :
+    <strong th:text="${bulletin.moyenneGenerale != null ? bulletin.moyenneGenerale : 'Aucune'}"></strong>
+</p>
+
+<p>
+    <a th:href="@{/etudiants}">Retour liste</a>
+</p>
+
+</body>
+</html>

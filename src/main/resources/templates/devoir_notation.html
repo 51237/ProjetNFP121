@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notation devoir</title>
+</head>
+<body>
+
+<h1>Notation du devoir</h1>
+
+<p>
+    <strong>Devoir :</strong> <span th:text="${devoir.description}"></span>
+    <br>
+    <strong>Classe :</strong> <span th:text="${devoir.idclasse.denomination}"></span>
+    <br>
+    <strong>Matière :</strong> <span th:text="${devoir.idmatiere.denomination}"></span>
+</p>
+
+<form th:action="@{/devoirs/{id}/notations(id=${devoir.id})}" method="post">
+
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Note /20</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="l : ${lignes}">
+            <td th:text="${l.idEtudiant}"></td>
+            <td th:text="${l.nom}"></td>
+            <td th:text="${l.prenom}"></td>
+            <td>
+                <input type="number"
+                       step="0.01"
+                       min="0" max="20"
+                       th:name="${'note_' + l.idEtudiant}"
+                       th:value="${l.note}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button type="submit">Enregistrer les notes</button>
+    <a th:href="@{/devoirs}">Retour</a>
+</form>
+
+</body>
+</html>

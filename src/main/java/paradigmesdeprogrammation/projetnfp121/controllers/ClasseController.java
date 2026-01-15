@@ -93,10 +93,6 @@ public class ClasseController {
         return "redirect:/classes";
     }
 
-    // =========================
-    // API (JSON) - même comportement qu'avant
-    // =========================
-
     @ResponseBody
     @GetMapping("/api/classes")
     public ResponseEntity<List<Classe>> getAllClasses() {

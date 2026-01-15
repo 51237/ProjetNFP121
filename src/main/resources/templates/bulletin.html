@@ -12,19 +12,16 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #e9ecef; /* Fond gris pour faire ressortir la feuille */
+            background-color: #e9ecef;
             color: #333;
             min-height: 100vh;
         }
 
-        /* Navbar & Navigation (Cachés à l'impression) */
         @media print {
-            .navbar, .no-print, .btn-back {
+            .navbar, .no-print {
                 display: none !important;
             }
-            body {
-                background-color: white;
-            }
+            body { background-color: white; }
             .paper-sheet {
                 box-shadow: none !important;
                 border: none !important;
@@ -34,25 +31,19 @@
             }
         }
 
-        /* Navbar Style (Identique aux autres pages) */
-        .navbar {
-            background-color: #2c3e50;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+        .navbar { background-color: #2c3e50; }
         .navbar-brand { font-weight: 700; color: #ecf0f1 !important; }
 
-        /* Effet "Feuille de papier" */
         .paper-sheet {
             background: white;
-            max-width: 210mm; /* Largeur A4 */
+            max-width: 210mm;
             margin: 40px auto;
             padding: 40px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            min-height: 297mm; /* Hauteur A4 */
+            min-height: 297mm;
             position: relative;
         }
 
-        /* Header du Bulletin */
         .bulletin-header {
             border-bottom: 2px solid #2c3e50;
             padding-bottom: 20px;
@@ -60,6 +51,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 20px;
         }
 
         .school-info h2 {
@@ -67,6 +59,7 @@
             color: #2c3e50;
             text-transform: uppercase;
             font-size: 1.5rem;
+            margin-bottom: 0;
         }
 
         .student-info {
@@ -75,9 +68,9 @@
             padding: 15px;
             border-radius: 5px;
             border-left: 4px solid #3498db;
+            min-width: 280px;
         }
 
-        /* Tableau des notes */
         .table-bulletin thead th {
             background-color: #2c3e50;
             color: white;
@@ -86,23 +79,12 @@
             border: none;
         }
 
-        .grade-badge {
-            display: inline-block;
-            background-color: #f1f1f1;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin: 2px;
-            font-size: 0.9rem;
-            border: 1px solid #ddd;
-        }
-
         .average-cell {
             font-weight: bold;
             color: #2c3e50;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
-        /* Moyenne Générale */
         .general-average-card {
             background-color: #f8f9fa;
             border: 2px solid #2c3e50;
@@ -115,24 +97,9 @@
         }
         .general-average-card h4 { margin: 0; font-size: 1rem; text-transform: uppercase; color: #7f8c8d; }
         .general-average-card .grade { font-size: 2.5rem; font-weight: 800; color: #2c3e50; line-height: 1; }
-
-        /* Signature area */
-        .signatures {
-            margin-top: 60px;
-            display: flex;
-            justify-content: space-between;
-            page-break-inside: avoid;
-        }
-        .signature-box {
-            width: 40%;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #555;
-        }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark no-print">
@@ -140,9 +107,10 @@
         <a class="navbar-brand" th:href="@{/}">
             <i class="fas fa-school me-2"></i>School Manager
         </a>
+
         <div class="ms-auto">
-            <a th:href="@{/classes}" class="text-white text-decoration-none">
-                <i class="fas fa-arrow-left me-1"></i> Retour
+            <a th:href="@{/classes/{id}/etudiants(id=${classeId})}" class="text-white text-decoration-none">
+                <i class="fas fa-arrow-left me-1"></i> Retour classe
             </a>
         </div>
     </div>
@@ -150,7 +118,7 @@
 
 <div class="container mt-4 no-print text-end" style="max-width: 210mm;">
     <button onclick="window.print()" class="btn btn-secondary shadow-sm">
-        <i class="fas fa-print me-2"></i> Imprimer le bulletin
+        <i class="fas fa-print me-2"></i> Imprimer
     </button>
 </div>
 
@@ -159,76 +127,50 @@
     <div class="bulletin-header">
         <div class="school-info">
             <h2>Projet NFP121</h2>
-            <p class="mb-0 text-muted">Année Scolaire 2023-2024</p>
-            <p class="text-muted small">Gestion Académique</p>
+            <p class="mb-0 text-muted">Bulletin de notes</p>
+            <p class="text-muted small mb-0">Gestion Académique</p>
         </div>
 
         <div class="student-info">
-            <h3 class="m-0 fw-bold" th:text="${etudiant.nom + ' ' + etudiant.prenom}">Nom Prénom</h3>
-            <div class="text-muted mt-1">
-                Classe : <strong th:text="${classe.denomination}">M1 Info</strong>
+            <h3 class="m-0 fw-bold" th:text="${bulletin.nom + ' ' + bulletin.prenom}">Nom Prénom</h3>
+            <div class="small text-muted mt-1">
+                ID Étudiant : <span th:text="${bulletin.idEtudiant}">123</span>
             </div>
-            <div class="small text-muted">ID Étudiant : <span th:text="${etudiant.id}">123</span></div>
         </div>
     </div>
 
-    <h4 class="text-center mb-4 text-uppercase border-bottom pb-2" style="letter-spacing: 2px;">Bulletin de notes</h4>
+    <h4 class="text-center mb-4 text-uppercase border-bottom pb-2" style="letter-spacing: 2px;">
+        Résumé par matière
+    </h4>
 
     <table class="table table-bordered table-bulletin">
         <thead>
         <tr>
-            <th style="width: 30%;">Matière</th>
-            <th style="width: 10%; text-align: center;">Coeff.</th>
-            <th style="width: 45%;">Notes (Devoirs)</th>
-            <th style="width: 15%; text-align: center;">Moyenne</th>
+            <th>Matière</th>
+            <th class="text-center" style="width: 180px;">Moyenne</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="ligne : ${lignesBulletin}">
-            <td class="align-middle">
-                <span class="fw-bold" th:text="${ligne.matiereNom}">Mathématiques</span>
-            </td>
 
-            <td class="align-middle text-center text-muted" th:text="${ligne.coefficient}">
-                2
-            </td>
-
-            <td class="align-middle">
-                        <span th:each="note : ${ligne.listeNotes}"
-                              class="grade-badge"
-                              th:text="${note}">12.5</span>
-
-                <span th:if="${#lists.isEmpty(ligne.listeNotes)}" class="text-muted small fst-italic">
-                            Aucune note
-                        </span>
-            </td>
-
-            <td class="align-middle text-center average-cell bg-light">
-                <span th:text="${ligne.moyenneMatiere != null ? #numbers.formatDecimal(ligne.moyenneMatiere, 1, 2) : '-'}">14.50</span>
-            </td>
+        <tr th:each="m : ${bulletin.moyenneParMatiere}">
+            <td class="align-middle fw-bold" th:text="${m.key}">Maths</td>
+            <td class="align-middle text-center average-cell bg-light"
+                th:text="${#numbers.formatDecimal(m.value, 1, 2)}">14.50</td>
         </tr>
+
+        <tr th:if="${#maps.isEmpty(bulletin.moyenneParMatiere)}">
+            <td colspan="2" class="text-muted">Aucune note.</td>
+        </tr>
+
         </tbody>
     </table>
 
     <div class="general-average-card">
         <h4>Moyenne Générale</h4>
-        <div class="grade" th:text="${moyenneGenerale != null ? #numbers.formatDecimal(moyenneGenerale, 1, 2) : '-'}">
+        <div class="grade"
+             th:text="${bulletin.moyenneGenerale != null ? #numbers.formatDecimal(bulletin.moyenneGenerale, 1, 2) : '-'}">
             13.45
         </div>
-        <div class="small text-muted mt-1">Mention Bien</div>
-    </div>
-
-    <div class="signatures">
-        <div class="signature-box">
-            Le Professeur Principal
-        </div>
-        <div class="signature-box">
-            La Direction
-        </div>
-    </div>
-
-    <div class="text-center mt-5 pt-5 text-muted small no-print">
-        <p>Ce bulletin est généré informatiquement par l'application NFP121.</p>
     </div>
 
 </div>

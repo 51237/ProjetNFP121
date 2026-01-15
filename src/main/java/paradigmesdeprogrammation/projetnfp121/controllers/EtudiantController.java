@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/etudiants")
+@RequestMapping("/api/etudiants")
 public class EtudiantController {
 
     private EtudiantRepository etudiantRepository;
@@ -35,12 +35,12 @@ public class EtudiantController {
 
     @GetMapping("/classe/{classe_id}")
     List<Etudiant> getEtudiantsByClasse(@PathVariable Long classe_id) {
-        return etudiantRepository.getEtudiantsByClasse_Id(classe_id);
+        return etudiantRepository.findByIdclasse_Id(classe_id);
     }
 
     @GetMapping("/disponible")
     List<Etudiant> getEtudiantsDisponible() {
-        return etudiantRepository.findByClasseIsNull();
+        return etudiantRepository.findByIdclasseIsNull();
     }
 
     @GetMapping("/{id}")

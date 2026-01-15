@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bulletin</title>
+</head>
+<body>
+
+<h1 th:text="'Bulletin - ' + ${bulletin.nom} + ' ' + ${bulletin.prenom}">Bulletin</h1>
+
+<h2>Moyennes par matière</h2>
+<ul>
+    <li th:each="m : ${bulletin.moyenneParMatiere}">
+        <span th:text="${m.key}"></span> :
+        <span th:text="${m.value}"></span>
+    </li>
+</ul>
+
+<h2>Moyenne générale</h2>
+<p th:text="${bulletin.moyenneGenerale}"></p>
+
+<a th:href="@{/classes/{id}/etudiants(id=${classeId})}">Retour</a>
+
+</body>
+</html>

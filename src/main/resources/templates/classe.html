@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classes</title>
+</head>
+<body>
+
+<h1>Liste des Classes</h1>
+
+<p>
+    <a th:href="@{/classes/new}">Créer Nouvelle classe</a>
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Dénomination</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${classes}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.denomination}"></td>
+        <td><a th:href="@{/classes/{id}/etudiants(id=${c.id})}">Les Etudiants</a></td>
+        <td>
+            <button><a target="_blank" th:href="@{/classes/{id}/edit(id=${c.id})}">Modifier</a></button>
+        |
+        <form th:action="@{/classes/{id}/delete(id=${c.id})}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('Supprimer la classe ?')">Supprimer</button>
+        </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/}">Retour</a>
+
+</body>
+</html>

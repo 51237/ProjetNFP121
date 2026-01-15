@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier classe</title>
+</head>
+<body>
+
+<h1 th:text="'Modifier : ' + ${classe.denomination}">Modifier</h1>
+
+<form th:action="@{/classes/{id}/edit(id=${classe.id})}" method="post">
+
+    <div>
+        <label>Dénomination :</label>
+        <input type="text" name="denomination" th:value="${classe.denomination}" required>
+    </div>
+
+    <hr>
+
+    <h3>Étudiants actuellement dans la classe</h3>
+    <div th:if="${#lists.isEmpty(etudiantsClasse)}">
+        Aucun étudiant dans cette classe.
+    </div>
+
+    <div th:each="e : ${etudiantsClasse}">
+        <label>
+            <input type="checkbox" name="removeIds" th:value="${e.id}">
+            Retirer : <span th:text="${e.nom + ' ' + e.prenom}"></span>
+        </label>
+        <br>
+    </div>
+
+    <hr>
+
+    <h3>Étudiants disponibles (sans classe)</h3>
+    <div th:if="${#lists.isEmpty(disponibles)}">
+        Aucun étudiant disponible.
+    </div>
+
+    <div th:each="e : ${disponibles}">
+        <label>
+            <input type="checkbox" name="addIds" th:value="${e.id}">
+            Ajouter : <span th:text="${e.nom + ' ' + e.prenom}"></span>
+        </label>
+        <br>
+    </div>
+
+    <button type="submit">Enregistrer</button>
+</form>
+
+<a th:href="@{/classes}">Retour</a>
+
+</body>
+</html>

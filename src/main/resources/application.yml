@@ -2,6 +2,17 @@ spring:
   application:
     name: ProjetNFP121
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    enabled: true
+    check-template-location: true
+
+  mvc:
+    view:
+      prefix: ""
+      suffix: ""
+
   datasource:
     url: jdbc:mysql://localhost/projetnfp121
     username: root
@@ -20,6 +31,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+    org.springframework.boot.autoconfigure: DEBUG
+    org.thymeleaf: DEBUG
 
 server:
   port: 8081

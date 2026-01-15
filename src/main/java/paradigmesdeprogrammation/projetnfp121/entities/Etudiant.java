@@ -24,5 +24,5 @@ public class Etudiant {
 
     @ManyToOne(fetch = FetchType. EAGER)
     @JoinColumn(name = "idclasse", nullable = true)
-    private Classe classe;
+    private Classe idclasse;
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle classe</title>
+</head>
+<body>
+
+<h1>Créer une classe</h1>
+
+<form th:action="@{/classes}" method="post">
+    <div>
+        <label>Dénomination :</label>
+        <input type="text" name="denomination" required>
+    </div>
+
+    <h3>Ajouter des étudiants disponibles (optionnel)</h3>
+    <div th:if="${#lists.isEmpty(disponibles)}">
+        Aucun étudiant disponible.
+    </div>
+
+    <div th:each="e : ${disponibles}">
+        <label>
+            <input type="checkbox" name="etudiantsIds" th:value="${e.id}">
+            <span th:text="${e.nom + ' ' + e.prenom}"></span>
+        </label>
+        <br>
+    </div>
+
+    <button type="submit">Créer</button>
+</form>
+
+<a th:href="@{/classes}">Retour</a>
+
+</body>
+</html>

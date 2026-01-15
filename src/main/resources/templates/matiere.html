@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Matières</title>
 </head>
 <body>
+<h1>Liste des matières</h1>
 
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Dénomination</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${matieres}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.denomination}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/}">Retour</a>
 </body>
 </html>

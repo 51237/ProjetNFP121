@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/matieres")
+@RequestMapping("/api/matieres")
 public class MatiereController {
 
     private final MatiereService matiereService;

@@ -12,10 +12,10 @@ import java.util.Optional;
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
     @Modifying
-    @Query("UPDATE Etudiant e SET e.classe = NULL WHERE e.classe.id = :classeId")
+    @Query("UPDATE Etudiant e SET e.idclasse = NULL WHERE e.idclasse.id = :classeId")
     int detachementEtudiantsFromClasse(@Param("classeId") Long classeId);
 
-    List<Etudiant> getEtudiantsByClasse_Id(Long id);
+//    List<Etudiant> getEtudiantsByIdClasse_Id(Long classeId);
 
     @Override
     List<Etudiant> findAll();
@@ -23,6 +23,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     @Override
     Optional<Etudiant> findById(Long id);
 
-    List<Etudiant> findByClasseIsNull();
+    List<Etudiant> findByIdclasseIsNull();
+
+    List<Etudiant> findByIdclasse_Id(Long classeId);
 
 }

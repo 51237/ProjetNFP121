@@ -2,7 +2,6 @@ package paradigmesdeprogrammation.projetnfp121.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
@@ -15,11 +14,9 @@ import java.util.Objects;
 @Embeddable
 public class NotationId implements Serializable {
     private static final long serialVersionUID = -1147067083937223103L;
-    @NotNull
     @Column(name = "iddevoir", nullable = false)
     private Long iddevoir;
 
-    @NotNull
     @Column(name = "idetudiant", nullable = false)
     private Long idetudiant;
 

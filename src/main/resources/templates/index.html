@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Projet NFP121</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+
+<h1>Projet NFP121</h1>
+
+<p>
+    Application de gestion des <strong>classes, étudiants, matières, devoirs et notes</strong>.
+</p>
+
+<hr>
+
+<h2>Navigation</h2>
+<ul>
+    <li>
+        <a th:href="@{/matieres}">
+            Gestion des matières
+        </a>
+    </li>
+    <li>
+        <a th:href="@{/classes}">
+            Gestion des classes
+        </a>
+    </li>
+    <li>
+        <a th:href="@{/etudiants}">
+            Gestion des etudiants
+        </a>
+    </li>
+    <li>
+        <a th:href="@{/devoirs}">
+            Gestion des devoirs
+        </a>
+    </li>
+</ul>
 
 </body>
 </html>

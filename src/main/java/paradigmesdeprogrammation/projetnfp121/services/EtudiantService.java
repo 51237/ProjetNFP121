@@ -33,7 +33,7 @@ public class EtudiantService {
         existingEtudiant.setPrenom(etudiantDetails.getPrenom());
 
         if (!hasNotes) {
-            existingEtudiant.setClasse(etudiantDetails.getClasse());
+            existingEtudiant.setIdclasse(etudiantDetails.getIdclasse());
         }
 
         return etudiantRepository.save(existingEtudiant);
@@ -56,4 +56,5 @@ public class EtudiantService {
         notationRepository.deleteByIdetudiant_Id(id);
         etudiantRepository.deleteById(id);
     }
+
 }

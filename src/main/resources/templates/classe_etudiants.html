@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Étudiants de la classe</title>
+</head>
+<body>
+
+<h1 th:text="'Élèves - ' + ${classe.denomination}">Élèves</h1>
+
+<ul>
+    <li th:each="e : ${etudiants}">
+        <span th:text="${e.nom + ' ' + e.prenom}"></span>
+
+        <!-- bouton bulletin de CET élève dans CETTE classe -->
+        <a th:href="@{/classes/{classeId}/bulletin/{etudiantId}(classeId=${classe.id}, etudiantId=${e.id})}">
+            Bulletin
+        </a>
+    </li>
+</ul>
+
+<a th:href="@{/classes}">Retour classes</a>
+
+</body>
+</html>

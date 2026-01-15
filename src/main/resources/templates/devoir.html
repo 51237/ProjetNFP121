@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Devoirs</title>
+</head>
+<body>
+
+<h1>Liste des devoirs</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Description</th>
+        <th>Catégorie</th>
+        <th>Coefficient</th>
+        <th>Date de création</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="d : ${devoirs}">
+        <td th:text="${d.id}"></td>
+        <td th:text="${d.description}"></td>
+        <td th:text="${d.categorie}"></td>
+        <td th:text="${d.coefficient}"></td>
+        <td th:text="${d.dateDeCreation}"></td>
+<!--        <td th:text="${d.idclasse}"></td>-->
+<!--        <td th:text="${d.idmatiere}"></td>-->
+    </tr>
+    </tbody>
+</table>
+
+
+<a th:href="@{/}">Retour</a>
+
+</body>
+</html>

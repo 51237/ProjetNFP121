@@ -1,7 +1,6 @@
 package paradigmesdeprogrammation.projetnfp121.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import paradigmesdeprogrammation.projetnfp121.entities.Etudiant;
 import paradigmesdeprogrammation.projetnfp121.entities.Matiere;
 
 import java.util.List;

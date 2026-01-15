@@ -31,13 +31,9 @@ public interface NotationRepository extends JpaRepository<Notation, Long> {
 
     boolean existsByIdetudiant_Id(Long etudiantId);
 
-    void deleteById_Idetudiant(Long etudiantId);
-
     boolean existsByIddevoir_Id(Long idDevoir);
 
     void deleteByIdetudiant_Id(Long idEtudiant);
-
-    void deleteByIddevoir_Idclasse_Id(Long classeId);
 
     List<Notation> findByIddevoir_Id(Long devoirId);
 

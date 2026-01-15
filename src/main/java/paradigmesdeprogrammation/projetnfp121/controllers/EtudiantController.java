@@ -82,10 +82,9 @@ public class EtudiantController {
         model.addAttribute("etudiant", etudiant);
         model.addAttribute("hasNotes", hasNotes);
 
-        // Si pas de notes => on propose les classes
         model.addAttribute("classes", classeRepository.findAll());
 
-        return "etudiant_edit"; // templates/etudiant_edit.html
+        return "etudiant_edit";
     }
 
     @PostMapping("/etudiants/{id}/edit")

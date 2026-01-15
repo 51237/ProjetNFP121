@@ -101,7 +101,6 @@ public class DevoirService {
 
     @Transactional
     public void deleteDevoirAvecNotations(Long devoirId) {
-        // supprime les notations, puis le devoir
         notationRepository.deleteByIddevoir_Id(devoirId);
         devoirRepository.deleteById(devoirId);
     }

@@ -15,8 +15,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     @Query("UPDATE Etudiant e SET e.idclasse = NULL WHERE e.idclasse.id = :classeId")
     int detachementEtudiantsFromClasse(@Param("classeId") Long classeId);
 
-//    List<Etudiant> getEtudiantsByIdClasse_Id(Long classeId);
-
     @Override
     List<Etudiant> findAll();
 

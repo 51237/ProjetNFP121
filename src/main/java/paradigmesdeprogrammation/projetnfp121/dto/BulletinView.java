@@ -9,10 +9,8 @@ public class BulletinView {
     private String nom;
     private String prenom;
 
-    // "Maths" -> 12.50, "Java" -> 15.00
     private Map<String, BigDecimal> moyenneParMatiere;
 
-    // moyenne générale pondérée
     private BigDecimal moyenneGenerale;
 
     public BulletinView(Long idEtudiant, String nom, String prenom,

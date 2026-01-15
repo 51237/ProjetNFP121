@@ -6,7 +6,7 @@ public class NoteView {
     private Long idEtudiant;
     private String nom;
     private String prenom;
-    private BigDecimal note; // peut être null
+    private BigDecimal note;
 
     public NoteView(Long idEtudiant, String nom, String prenom, BigDecimal note) {
         this.idEtudiant = idEtudiant;

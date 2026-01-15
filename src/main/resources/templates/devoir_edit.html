@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier devoir</title>
+</head>
+<body>
+
+<h1>Modifier un Devoir</h1>
+
+<p th:if="${hasNotes}" style="color:red;">
+    Attention : au moins une notation existe. Vous ne pouvez pas modifier la classe ni la matière.
+</p>
+
+<form th:action="@{/devoirs/{id}/edit(id=${devoir.id})}" method="post">
+
+    <p th:if="${!hasNotes}">
+        <label>Classe :</label>
+        <select name="classeId" required>
+            <option th:each="c : ${classes}"
+                    th:value="${c.id}"
+                    th:text="${c.denomination}"
+                    th:selected="${devoir.idclasse.id == c.id}">
+            </option>
+        </select>
+    </p>
+
+    <p th:if="${hasNotes}">
+        <label>Classe :</label>
+        <span th:text="${devoir.idclasse.denomination}"></span>
+        <input type="hidden" name="classeId" th:value="${devoir.idclasse.id}">
+    </p>
+
+    <p th:if="${!hasNotes}">
+        <label>Matière :</label>
+        <select name="matiereId" required>
+            <option th:each="m : ${matieres}"
+                    th:value="${m.id}"
+                    th:text="${m.denomination}"
+                    th:selected="${devoir.idmatiere.id == m.id}">
+            </option>
+        </select>
+    </p>
+
+    <p th:if="${hasNotes}">
+        <label>Matière :</label>
+        <span th:text="${devoir.idmatiere.denomination}"></span>
+        <input type="hidden" name="matiereId" th:value="${devoir.idmatiere.id}">
+    </p>
+
+    <p>
+        <label>Description :</label>
+        <input type="text" name="description" th:value="${devoir.description}" required>
+    </p>
+
+    <p>
+        <label>Catégorie :</label>
+        <select name="categorie" required>
+            <option value="CC" th:selected="${devoir.categorie == 'CC'}">CC</option>
+            <option value="Examen" th:selected="${devoir.categorie == 'Examen'}">Examen</option>
+        </select>
+    </p>
+
+    <p>
+        <label>Coefficient :</label>
+        <input type="number" step="0.01" name="coefficient" th:value="${devoir.coefficient}">
+    </p>
+
+    <button type="submit">Enregistrer</button>
+    <a th:href="@{/devoirs}">Annuler</a>
+</form>
+
+</body>
+</html>

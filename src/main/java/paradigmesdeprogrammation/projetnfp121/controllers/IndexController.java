@@ -25,15 +25,4 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/etudiants")
-    public String AfficherEtudiants(Model model) {
-        model.addAttribute("etudiants", etudiantService.findAll());
-        return "etudiant";
-    }
-
-    @GetMapping("/devoirs")
-    public String AfficherDevoirs(Model model) {
-        model.addAttribute("devoirs", devoirService.findAll());
-        return "devoir";
-    }
 }

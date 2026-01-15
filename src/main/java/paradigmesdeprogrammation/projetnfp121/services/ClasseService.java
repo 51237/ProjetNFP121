@@ -97,6 +97,20 @@ public class ClasseService {
     }
 
     @Transactional
+    public BulletinView calculerReleveEtudiant(Long etudiantId) {
+
+        Etudiant e = etudiantRepository.findById(etudiantId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etudiant not found"));
+
+        if (e.getIdclasse() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etudiant has no classe");
+        }
+
+        return calculerBulletinEtudiant(e.getIdclasse().getId(), etudiantId);
+    }
+
+
+    @Transactional
     public void deleteClasseAndClearEtudiant(Long classeId) {
 
         Classe classe = classeRepository.findById(classeId)

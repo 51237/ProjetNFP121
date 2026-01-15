@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Devoirs</title>
 </head>
 <body>
 
-<h1>Liste des devoirs</h1>
+<h1>Liste des Devoirs</h1>
+
+<p>
+    <a th:href="@{/devoirs/new}">Créer Nouveau devoir</a>
+</p>
 
 <table>
     <thead>
@@ -14,23 +18,35 @@
         <th>#</th>
         <th>Description</th>
         <th>Catégorie</th>
-        <th>Coefficient</th>
-        <th>Date de création</th>
+        <th>Classe</th>
+        <th>Matière</th>
+        <th>Coef</th>
+        <th>Date</th>
+        <th>Actions</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="d : ${devoirs}">
         <td th:text="${d.id}"></td>
         <td th:text="${d.description}"></td>
         <td th:text="${d.categorie}"></td>
+        <td th:text="${d.idclasse.denomination}"></td>
+        <td th:text="${d.idmatiere.denomination}"></td>
         <td th:text="${d.coefficient}"></td>
         <td th:text="${d.dateDeCreation}"></td>
-<!--        <td th:text="${d.idclasse}"></td>-->
-<!--        <td th:text="${d.idmatiere}"></td>-->
+        <td>
+            <a th:href="@{/devoirs/{id}/notations(id=${d.id})}">Noter</a>
+            |
+            <button><a th:href="@{/devoirs/{id}/edit(id=${d.id})}">Modifier</a></button>
+            |
+            <form th:action="@{/devoirs/{id}/delete(id=${d.id})}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('Supprimer le devoir ? (notations supprimées aussi)')">Supprimer</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
-
 
 <a th:href="@{/}">Retour</a>
 

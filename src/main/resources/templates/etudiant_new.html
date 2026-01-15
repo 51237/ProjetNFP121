@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvel Etudiant</title>
+</head>
+<body>
+
+<h1>Créer un Etudiant</h1>
+
+<form th:action="@{/etudiants}" method="post">
+
+    <p>
+        <label>Nom :</label>
+        <input type="text" name="nom" required>
+    </p>
+
+    <p>
+        <label>Prénom :</label>
+        <input type="text" name="prenom" required>
+    </p>
+
+    <p>
+        <label>Classe (optionnel) :</label>
+        <select name="classeId">
+            <option value="">Aucune</option>
+            <option th:each="c : ${classes}"
+                    th:value="${c.id}"
+                    th:text="${c.denomination}">
+            </option>
+        </select>
+    </p>
+
+    <button type="submit">Créer</button>
+    <a th:href="@{/etudiants}">Annuler</a>
+</form>
+
+</body>
+</html>

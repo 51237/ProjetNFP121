@@ -29,7 +29,9 @@ public interface NotationRepository extends JpaRepository<Notation, Long> {
     @Override
     Optional<Notation> findById(Long id);
 
-    boolean existsByIdetudiant_Id(Long idEtudiant);
+    boolean existsByIdetudiant_Id(Long etudiantId);
+
+    void deleteById_Idetudiant(Long etudiantId);
 
     boolean existsByIddevoir_Id(Long idDevoir);
 
@@ -37,6 +39,13 @@ public interface NotationRepository extends JpaRepository<Notation, Long> {
 
     void deleteByIddevoir_Idclasse_Id(Long classeId);
 
+    List<Notation> findByIddevoir_Id(Long devoirId);
+
+    void deleteByIddevoir_Id(Long devoirId);
+
     List<Notation> findByIdetudiant_IdAndIddevoir_Idclasse_Id(Long etudiantId, Long classeId);
 
+    Optional<Notation> findById_IddevoirAndId_Idetudiant(Long devoirId, Long etudiantId);
+
+    boolean existsById_Idetudiant(Long idIdetudiant);
 }

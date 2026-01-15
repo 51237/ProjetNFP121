@@ -20,7 +20,8 @@ public class Etudiant {
     @Column(nullable = false)
     private String prenom;
 
-//    private String photo;
+    @Column(nullable = true)
+    private String photo;
 
     @ManyToOne(fetch = FetchType. EAGER)
     @JoinColumn(name = "idclasse", nullable = true)

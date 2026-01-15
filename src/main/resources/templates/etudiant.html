@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Etudiants</title>
 </head>
 <body>
+
 <h1>Liste des Etudiants</h1>
+
+<p>
+    <a th:href="@{/etudiants/new}">Créer Nouvel étudiant</a>
+</p>
 
 <table>
     <thead>
@@ -13,14 +18,34 @@
         <th>#</th>
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Classe</th>
+        <th>Actions</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="e : ${etudiants}">
         <td th:text="${e.id}"></td>
         <td th:text="${e.nom}"></td>
         <td th:text="${e.prenom}"></td>
-<!--        <td th:text="${e.idclasse}"></td>-->
+
+        <td th:text="${e.idclasse != null ? e.idclasse.denomination : 'Aucune'}"></td>
+
+        <td>
+            <a th:href="@{/etudiants/{id}/releve(id=${e.id})}">Relevé</a>
+            |
+            <button>
+                <a th:href="@{/etudiants/{id}/edit(id=${e.id})}">Modifier</a>
+            </button>
+            |
+            <form th:action="@{/etudiants/{id}/delete(id=${e.id})}"
+                  method="post"
+                  style="display:inline;">
+                <button type="submit" onclick="return confirm('Supprimer l’étudiant ? (notes supprimées aussi)')">
+                    Supprimer
+                </button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

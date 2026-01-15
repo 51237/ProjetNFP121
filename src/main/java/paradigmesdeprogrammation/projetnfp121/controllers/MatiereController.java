@@ -20,10 +20,6 @@ public class MatiereController {
         this.matiereService = matiereService;
     }
 
-    // =========================
-    // VUES HTML (Thymeleaf)
-    // =========================
-
     @GetMapping("/matieres")
     public String afficherMatieres(Model model) {
         model.addAttribute("matieres", matiereService.findAll());
@@ -74,10 +70,6 @@ public class MatiereController {
             return "matiere";
         }
     }
-
-    // =========================
-    // API (JSON) - même style que ClasseController
-    // =========================
 
     @ResponseBody
     @GetMapping("/api/matieres")

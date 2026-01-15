@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import paradigmesdeprogrammation.projetnfp121.dto.BulletinView;
 import paradigmesdeprogrammation.projetnfp121.entities.Etudiant;
-import paradigmesdeprogrammation.projetnfp121.entities.Matiere;
 import paradigmesdeprogrammation.projetnfp121.repositories.EtudiantRepository;
 import paradigmesdeprogrammation.projetnfp121.repositories.NotationRepository;
 
@@ -27,7 +27,7 @@ public class EtudiantService {
         Etudiant existingEtudiant = etudiantRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etudiant not found"));
 
-        boolean hasNotes = notationRepository.existsByIdetudiant_Id(id);
+        boolean hasNotes = notationRepository.existsById_Idetudiant(id);
 
         existingEtudiant.setNom(etudiantDetails.getNom());
         existingEtudiant.setPrenom(etudiantDetails.getPrenom());

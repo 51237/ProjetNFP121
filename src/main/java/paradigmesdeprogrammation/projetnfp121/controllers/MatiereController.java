@@ -23,13 +23,13 @@ public class MatiereController {
     @GetMapping("/matieres")
     public String afficherMatieres(Model model) {
         model.addAttribute("matieres", matiereService.findAll());
-        return "matiere"; // templates/matiere.html
+        return "matiere";
     }
 
     @GetMapping("/matieres/new")
     public String formCreateMatiere(Model model) {
         model.addAttribute("matiere", new Matiere());
-        return "matiere_new"; // templates/matiere_new.html
+        return "matiere_new";
     }
 
     @PostMapping("/matieres")
@@ -44,7 +44,7 @@ public class MatiereController {
     public String formEditMatiere(@PathVariable Long id, Model model) {
         Matiere matiere = matiereService.findById(id).orElseThrow();
         model.addAttribute("matiere", matiere);
-        return "matiere_edit"; // templates/matiere_edit.html
+        return "matiere_edit";
     }
 
     @PostMapping("/matieres/{id}/edit")
@@ -61,7 +61,7 @@ public class MatiereController {
     @PostMapping("/matieres/{id}/delete")
     public String deleteMatiere(@PathVariable Long id, Model model) {
         try {
-            matiereService.delete(id); // applique la règle "pas si utilisée dans un devoir"
+            matiereService.delete(id);
             return "redirect:/matieres";
         } catch (RuntimeException e) {
             // On ré-affiche la liste avec un message d’erreur (simple)
@@ -119,7 +119,6 @@ public class MatiereController {
             matiereService.delete(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            // Conflit : matière utilisée dans un devoir
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }

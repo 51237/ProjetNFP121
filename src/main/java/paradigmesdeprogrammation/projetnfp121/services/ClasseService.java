@@ -47,7 +47,6 @@ public class ClasseService {
         Etudiant e = etudiantRepository.findById(etudiantId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etudiant not found"));
 
-        // sécurité : l'étudiant doit appartenir à la classe
         if (e.getIdclasse() == null || !e.getIdclasse().getId().equals(classeId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etudiant not in this classe");
         }
@@ -135,7 +134,7 @@ public class ClasseService {
         if (etudiantsIds != null && !etudiantsIds.isEmpty()) {
             List<Etudiant> etudiants = etudiantRepository.findAllById(etudiantsIds);
             for (Etudiant e : etudiants) {
-                if (e.getIdclasse() == null) { // dispo uniquement
+                if (e.getIdclasse() == null) {
                     e.setIdclasse(saved);
                 }
             }
@@ -153,7 +152,6 @@ public class ClasseService {
 
         c.setDenomination(denomination);
 
-        // enlever -> dispo
         if (removeIds != null && !removeIds.isEmpty()) {
             List<Etudiant> toRemove = etudiantRepository.findAllById(removeIds);
             for (Etudiant e : toRemove) {
@@ -164,7 +162,6 @@ public class ClasseService {
             etudiantRepository.saveAll(toRemove);
         }
 
-        // ajouter -> dispo uniquement
         if (addIds != null && !addIds.isEmpty()) {
             List<Etudiant> toAdd = etudiantRepository.findAllById(addIds);
             for (Etudiant e : toAdd) {

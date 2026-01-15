@@ -1,50 +1,190 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nouveau devoir</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Devoir</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar { background-color: #2c3e50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; color: #ecf0f1 !important; }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+            max-width: 700px; /* Un peu plus large pour la ligne double */
+            margin: 0 auto;
+        }
+
+        .card-header {
+            background-color: #ffc107; /* Jaune Devoirs */
+            color: #212529;
+            padding: 20px 25px;
+            border-bottom: none;
+            text-align: center;
+        }
+        .card-header h2 { margin: 0; font-size: 1.5rem; font-weight: 600; }
+
+        /* Inputs & Selects */
+        .form-label { font-weight: 500; color: #555; font-size: 0.9rem; margin-bottom: 5px; }
+
+        .input-group-text { background-color: white; border-right: none; color: #d39e00; }
+        .form-control, .form-select { border-left: none; padding: 10px; }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: none;
+            border-color: #ffc107;
+            border-left: 1px solid #ffc107;
+        }
+        .input-group:focus-within .input-group-text {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        /* Boutons */
+        .btn-submit {
+            background-color: #ffc107;
+            border: none;
+            padding: 10px 40px;
+            font-weight: 600;
+            color: #212529;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .link-cancel { color: #6c757d; text-decoration: none; margin-right: 20px; }
+        .link-cancel:hover { color: #343a40; text-decoration: underline; }
+    </style>
 </head>
 <body>
 
-<h1>Créer un Devoir</h1>
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="fas fa-school me-2"></i>School Manager
+        </a>
+        <div class="ms-auto">
+            <a th:href="@{/devoirs}" class="text-white text-decoration-none">
+                <i class="fas fa-arrow-left me-1"></i> Retour liste
+            </a>
+        </div>
+    </div>
+</nav>
 
-<form th:action="@{/devoirs}" method="post">
+<div class="container mb-5">
 
-    <p>
-        <label>Classe :</label>
-        <select name="classeId" required>
-            <option th:each="c : ${classes}" th:value="${c.id}" th:text="${c.denomination}"></option>
-        </select>
-    </p>
+    <nav aria-label="breadcrumb" class="mb-4 d-flex justify-content-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none text-muted">Accueil</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/devoirs}" class="text-decoration-none text-muted">Devoirs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Nouveau</li>
+        </ol>
+    </nav>
 
-    <p>
-        <label>Matière :</label>
-        <select name="matiereId" required>
-            <option th:each="m : ${matieres}" th:value="${m.id}" th:text="${m.denomination}"></option>
-        </select>
-    </p>
+    <div class="form-card card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-file-signature me-2"></i>Créer un Devoir
+            </h2>
+        </div>
 
-    <p>
-        <label>Description :</label>
-        <input type="text" name="description" required>
-    </p>
+        <div class="card-body p-4 p-md-5">
+            <form th:action="@{/devoirs}" method="post">
 
-    <p>
-        <label>Catégorie :</label>
-        <select name="categorie" required>
-            <option value="CC">CC</option>
-            <option value="Examen">Examen</option>
-        </select>
-    </p>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Classe concernée</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+                            <select class="form-select" name="classeId" required>
+                                <option value="" disabled selected>Choisir une classe...</option>
+                                <option th:each="c : ${classes}"
+                                        th:value="${c.id}"
+                                        th:text="${c.denomination}"></option>
+                            </select>
+                        </div>
+                    </div>
 
-    <p>
-        <label>Coefficient (défaut 1.0) :</label>
-        <input type="number" step="0.01" name="coefficient" placeholder="1.0">
-    </p>
+                    <div class="col-md-6">
+                        <label class="form-label">Matière</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-book"></i></span>
+                            <select class="form-select" name="matiereId" required>
+                                <option value="" disabled selected>Choisir une matière...</option>
+                                <option th:each="m : ${matieres}"
+                                        th:value="${m.id}"
+                                        th:text="${m.denomination}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-    <button type="submit">Créer</button>
-    <a th:href="@{/devoirs}">Annuler</a>
-</form>
+                <div class="mb-4">
+                    <label class="form-label">Intitulé / Description</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                        <input type="text" class="form-control" name="description"
+                               placeholder="Ex: Contrôle sur les vecteurs, Dissertation..." required>
+                    </div>
+                </div>
 
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Catégorie</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                            <select class="form-select" name="categorie" required>
+                                <option value="CC">Contrôle Continu (CC)</option>
+                                <option value="Examen">Examen / Partiel</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Coefficient</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-weight-hanging"></i></span>
+                            <input type="number" class="form-control" step="0.01" name="coefficient"
+                                   placeholder="1.0" value="1.0">
+                        </div>
+                        <div class="form-text small">Influence sur la moyenne générale.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end align-items-center mt-5">
+                    <a th:href="@{/devoirs}" class="link-cancel">Annuler</a>
+                    <button type="submit" class="btn btn-submit rounded-pill">
+                        <i class="fas fa-check me-2"></i>Créer le devoir
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

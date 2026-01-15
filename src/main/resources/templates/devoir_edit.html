@@ -1,74 +1,228 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier devoir</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier Devoir</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar { background-color: #2c3e50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; color: #ecf0f1 !important; }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            background-color: #ffc107; /* Jaune Modification/Devoir */
+            color: #212529;
+            padding: 20px 25px;
+            border-bottom: none;
+            text-align: center;
+        }
+        .card-header h2 { margin: 0; font-size: 1.5rem; font-weight: 600; }
+
+        /* Inputs & Selects */
+        .form-label { font-weight: 500; color: #555; margin-bottom: 5px; }
+        .input-group-text { background-color: white; border-right: none; color: #d39e00; }
+
+        /* Champs verrouillés */
+        .input-group-text.locked { background-color: #e9ecef; color: #6c757d; }
+        .form-control:disabled { background-color: #e9ecef; color: #6c757d; }
+
+        .form-control, .form-select { border-left: none; padding: 10px; }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: none;
+            border-color: #ffc107;
+            border-left: 1px solid #ffc107;
+        }
+        .input-group:focus-within .input-group-text {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        /* Alerte spéciale */
+        .alert-locked {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        /* Boutons */
+        .btn-submit {
+            background-color: #ffc107;
+            border: none;
+            padding: 10px 40px;
+            font-weight: 600;
+            color: #212529;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .link-cancel { color: #6c757d; text-decoration: none; margin-right: 20px; }
+        .link-cancel:hover { color: #343a40; text-decoration: underline; }
+    </style>
 </head>
 <body>
 
-<h1>Modifier un Devoir</h1>
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="fas fa-school me-2"></i>School Manager
+        </a>
+        <div class="ms-auto">
+            <a th:href="@{/devoirs}" class="text-white text-decoration-none">
+                <i class="fas fa-arrow-left me-1"></i> Retour liste
+            </a>
+        </div>
+    </div>
+</nav>
 
-<p th:if="${hasNotes}" style="color:red;">
-    Attention : au moins une notation existe. Vous ne pouvez pas modifier la classe ni la matière.
-</p>
+<div class="container mb-5">
 
-<form th:action="@{/devoirs/{id}/edit(id=${devoir.id})}" method="post">
+    <nav aria-label="breadcrumb" class="mb-4 d-flex justify-content-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none text-muted">Accueil</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/devoirs}" class="text-decoration-none text-muted">Devoirs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+        </ol>
+    </nav>
 
-    <p th:if="${!hasNotes}">
-        <label>Classe :</label>
-        <select name="classeId" required>
-            <option th:each="c : ${classes}"
-                    th:value="${c.id}"
-                    th:text="${c.denomination}"
-                    th:selected="${devoir.idclasse.id == c.id}">
-            </option>
-        </select>
-    </p>
+    <div class="form-card card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-edit me-2"></i>Modifier le Devoir
+            </h2>
+        </div>
 
-    <p th:if="${hasNotes}">
-        <label>Classe :</label>
-        <span th:text="${devoir.idclasse.denomination}"></span>
-        <input type="hidden" name="classeId" th:value="${devoir.idclasse.id}">
-    </p>
+        <div class="card-body p-4 p-md-5">
 
-    <p th:if="${!hasNotes}">
-        <label>Matière :</label>
-        <select name="matiereId" required>
-            <option th:each="m : ${matieres}"
-                    th:value="${m.id}"
-                    th:text="${m.denomination}"
-                    th:selected="${devoir.idmatiere.id == m.id}">
-            </option>
-        </select>
-    </p>
+            <div th:if="${hasNotes}" class="alert alert-locked d-flex align-items-center mb-4" role="alert">
+                <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                <div>
+                    <strong>Modification restreinte</strong><br>
+                    Des notes ont déjà été saisies pour ce devoir. La <u>classe</u> et la <u>matière</u> ne peuvent plus être modifiées.
+                </div>
+            </div>
 
-    <p th:if="${hasNotes}">
-        <label>Matière :</label>
-        <span th:text="${devoir.idmatiere.denomination}"></span>
-        <input type="hidden" name="matiereId" th:value="${devoir.idmatiere.id}">
-    </p>
+            <form th:action="@{/devoirs/{id}/edit(id=${devoir.id})}" method="post">
 
-    <p>
-        <label>Description :</label>
-        <input type="text" name="description" th:value="${devoir.description}" required>
-    </p>
+                <div class="row g-3 mb-4">
 
-    <p>
-        <label>Catégorie :</label>
-        <select name="categorie" required>
-            <option value="CC" th:selected="${devoir.categorie == 'CC'}">CC</option>
-            <option value="Examen" th:selected="${devoir.categorie == 'Examen'}">Examen</option>
-        </select>
-    </p>
+                    <div class="col-md-6">
+                        <label class="form-label">Classe</label>
 
-    <p>
-        <label>Coefficient :</label>
-        <input type="number" step="0.01" name="coefficient" th:value="${devoir.coefficient}">
-    </p>
+                        <div class="input-group" th:if="${!hasNotes}">
+                            <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+                            <select class="form-select" name="classeId" required>
+                                <option th:each="c : ${classes}"
+                                        th:value="${c.id}"
+                                        th:text="${c.denomination}"
+                                        th:selected="${devoir.idclasse.id == c.id}">
+                                </option>
+                            </select>
+                        </div>
 
-    <button type="submit">Enregistrer</button>
-    <a th:href="@{/devoirs}">Annuler</a>
-</form>
+                        <div class="input-group" th:if="${hasNotes}">
+                            <span class="input-group-text locked"><i class="fas fa-lock"></i></span>
+                            <input type="text" class="form-control" th:value="${devoir.idclasse.denomination}" disabled>
+                            <input type="hidden" name="classeId" th:value="${devoir.idclasse.id}">
+                        </div>
+                    </div>
 
+                    <div class="col-md-6">
+                        <label class="form-label">Matière</label>
+
+                        <div class="input-group" th:if="${!hasNotes}">
+                            <span class="input-group-text"><i class="fas fa-book"></i></span>
+                            <select class="form-select" name="matiereId" required>
+                                <option th:each="m : ${matieres}"
+                                        th:value="${m.id}"
+                                        th:text="${m.denomination}"
+                                        th:selected="${devoir.idmatiere.id == m.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="input-group" th:if="${hasNotes}">
+                            <span class="input-group-text locked"><i class="fas fa-lock"></i></span>
+                            <input type="text" class="form-control" th:value="${devoir.idmatiere.denomination}" disabled>
+                            <input type="hidden" name="matiereId" th:value="${devoir.idmatiere.id}">
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4 text-muted opacity-25">
+
+                <div class="mb-4">
+                    <label class="form-label">Intitulé / Description</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                        <input type="text" class="form-control" name="description"
+                               th:value="${devoir.description}" required>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Catégorie</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                            <select class="form-select" name="categorie" required>
+                                <option value="CC" th:selected="${devoir.categorie == 'CC'}">CC</option>
+                                <option value="Examen" th:selected="${devoir.categorie == 'Examen'}">Examen</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Coefficient</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-weight-hanging"></i></span>
+                            <input type="number" class="form-control" step="0.01" name="coefficient"
+                                   th:value="${devoir.coefficient}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end align-items-center mt-5">
+                    <a th:href="@{/devoirs}" class="link-cancel">Annuler</a>
+                    <button type="submit" class="btn btn-submit rounded-pill">
+                        <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

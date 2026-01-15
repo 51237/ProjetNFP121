@@ -1,56 +1,183 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Etudiants</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Étudiants</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar { background-color: #2c3e50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; color: #ecf0f1 !important; }
+
+        /* Carte Conteneur */
+        .content-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #fff;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .card-header h2 { margin: 0; font-size: 1.5rem; color: #2c3e50; font-weight: 600; }
+
+        /* Tableau */
+        .table { margin-bottom: 0; }
+        .table thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #eaeaea;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 15px 20px;
+        }
+        .table tbody td {
+            padding: 15px 20px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .table tbody tr:hover { background-color: #fcfcfc; }
+
+        /* Badges pour la classe */
+        .badge-classe {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .badge-aucune {
+            background-color: #f5f5f5;
+            color: #999;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* Bouton Retour */
+        .btn-back {
+            background-color: #fff;
+            color: #2c3e50;
+            border: 1px solid #ced4da;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #e9ecef; color: #2c3e50; }
+    </style>
 </head>
 <body>
 
-<h1>Liste des Etudiants</h1>
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="fas fa-school me-2"></i> School Manager
+        </a>
+        <div class="ms-auto">
+            <a th:href="@{/}" class="text-white text-decoration-none">
+                <i class="fas fa-home"></i> Accueil
+            </a>
+        </div>
+    </div>
+</nav>
 
-<p>
-    <a th:href="@{/etudiants/new}">Créer Nouvel étudiant</a>
-</p>
+<div class="container mb-5">
 
-<table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Classe</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
+    <div class="content-card card">
+        <div class="card-header">
+            <h2>Liste des Étudiants</h2>
 
-    <tbody>
-    <tr th:each="e : ${etudiants}">
-        <td th:text="${e.id}"></td>
-        <td th:text="${e.nom}"></td>
-        <td th:text="${e.prenom}"></td>
+            <a th:href="@{/etudiants/new}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-user-plus me-2"></i>Créer Nouvel étudiant
+            </a>
+        </div>
 
-        <td th:text="${e.idclasse != null ? e.idclasse.denomination : 'Aucune'}"></td>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Classe</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="e : ${etudiants}">
+                        <td class="fw-bold text-muted" th:text="${e.id}">1</td>
+                        <td class="fw-bold" th:text="${e.nom}">Nom</td>
+                        <td th:text="${e.prenom}">Prénom</td>
 
-        <td>
-            <a th:href="@{/etudiants/{id}/releve(id=${e.id})}">Relevé</a>
-            |
-            <button>
-                <a th:href="@{/etudiants/{id}/edit(id=${e.id})}">Modifier</a>
-            </button>
-            |
-            <form th:action="@{/etudiants/{id}/delete(id=${e.id})}"
-                  method="post"
-                  style="display:inline;">
-                <button type="submit" onclick="return confirm('Supprimer l’étudiant ? (notes supprimées aussi)')">
-                    Supprimer
-                </button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+                        <td>
+                                    <span th:if="${e.idclasse != null}" class="badge-classe">
+                                        <i class="fas fa-chalkboard me-1"></i>
+                                        <span th:text="${e.idclasse.denomination}"></span>
+                                    </span>
+                            <span th:unless="${e.idclasse != null}" class="badge-aucune">
+                                        Aucune
+                                    </span>
+                        </td>
 
-<a th:href="@{/}">Retour</a>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/etudiants/{id}/releve(id=${e.id})}" class="btn btn-sm btn-outline-info" title="Voir Relevé">
+                                    <i class="fas fa-file-alt"></i> Relevé
+                                </a>
+
+                                <a th:href="@{/etudiants/{id}/edit(id=${e.id})}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <form th:action="@{/etudiants/{id}/delete(id=${e.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                                            onclick="return confirm('Supprimer l’étudiant ? (notes supprimées aussi)')" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a th:href="@{/}" class="btn-back">
+            <i class="fas fa-arrow-left me-2"></i> Retour
+        </a>
+    </div>
+</div>
 
 </body>
 </html>

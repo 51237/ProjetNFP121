@@ -57,4 +57,12 @@ public class EtudiantService {
         etudiantRepository.deleteById(id);
     }
 
+    public List<Etudiant> findByClasseId(Long classeId) {
+        return etudiantRepository.findByIdclasse_Id(classeId);
+    }
+
+    public List<Etudiant> findDisponibles() {
+        return etudiantRepository.findByIdclasseIsNull();
+    }
+
 }

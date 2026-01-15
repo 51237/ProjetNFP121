@@ -29,10 +29,6 @@ public class DevoirController {
         this.matiereRepository = matiereRepository;
     }
 
-    // =========================
-    // VUES HTML (Thymeleaf)
-    // =========================
-
     @GetMapping("/devoirs")
     public String afficherDevoirs(Model model) {
         model.addAttribute("devoirs", devoirService.findAll());
@@ -88,7 +84,6 @@ public class DevoirController {
         return "redirect:/devoirs";
     }
 
-    // ---- Notation HTML ----
 
     @GetMapping("/devoirs/{id}/notations")
     public String formNotations(@PathVariable Long id, Model model) {
@@ -105,7 +100,6 @@ public class DevoirController {
     public String saveNotations(@PathVariable Long id,
                                 @RequestParam Map<String, String> params) {
 
-        // On lit des champs "note_12" -> "15.5"
         Map<Long, BigDecimal> notes = new HashMap<>();
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -125,10 +119,6 @@ public class DevoirController {
         devoirService.saveNotations(id, notes);
         return "redirect:/devoirs";
     }
-
-    // =========================
-    // API (JSON)
-    // =========================
 
     @ResponseBody
     @GetMapping("/api/devoirs")
@@ -153,8 +143,6 @@ public class DevoirController {
         Devoir saved = devoirService.findById(devoir.getId()).orElse(null) == null
                 ? devoirService.findById(devoir.getId()).orElse(null)
                 : null;
-        // plus simple : on utilise le repo via service save si tu veux, mais attention aux règles.
-        // Ici on conseille plutôt de passer par createDevoir côté HTML.
         Devoir created = devoirService.createDevoir(
                 devoir.getIdclasse().getId(),
                 devoir.getIdmatiere().getId(),

@@ -34,21 +34,17 @@ public class EtudiantController {
         this.classeService = classeService;
     }
 
-    // =========================
-    // VUES HTML (Thymeleaf)
-    // =========================
-
     @GetMapping("/etudiants")
     public String afficherEtudiants(Model model) {
         model.addAttribute("etudiants", etudiantService.findAll());
-        return "etudiant"; // templates/etudiant.html
+        return "etudiant";
     }
 
     @GetMapping("/etudiants/new")
     public String formCreateEtudiant(Model model) {
         model.addAttribute("etudiant", new Etudiant());
         model.addAttribute("classes", classeRepository.findAll());
-        return "etudiant_new"; // templates/etudiant_new.html
+        return "etudiant_new";
     }
 
     @PostMapping("/etudiants")
@@ -127,10 +123,6 @@ public class EtudiantController {
         return "etudiant_releve";
     }
 
-    // =========================
-    // API (JSON) - même style que ClasseController
-    // =========================
-
     @ResponseBody
     @GetMapping("/api/etudiants")
     public ResponseEntity<List<Etudiant>> apiGetAllEtudiants() {
@@ -149,18 +141,13 @@ public class EtudiantController {
     @ResponseBody
     @GetMapping("/api/etudiants/classe/{classeId}")
     public ResponseEntity<List<Etudiant>> apiGetEtudiantsByClasse(@PathVariable Long classeId) {
-        // si tu veux passer par repo: etudiantRepository.findByIdclasse_Id(classeId)
-        // mais on reste "service style"
-        // => à défaut, on filtre (ou tu ajoutes une méthode service dédiée)
-        // Je te laisse simple : ajoute une méthode EtudiantService si tu veux.
-        throw new UnsupportedOperationException("Ajoute EtudiantService.findByClasseId(classeId) si besoin");
+        return ResponseEntity.ok(etudiantService.findByClasseId(classeId));
     }
 
     @ResponseBody
     @GetMapping("/api/etudiants/disponible")
     public ResponseEntity<List<Etudiant>> apiGetEtudiantsDisponible() {
-        // pareil : tu as repo findByIdclasseIsNull()
-        throw new UnsupportedOperationException("Ajoute EtudiantService.findDisponibles() si besoin");
+        return ResponseEntity.ok(etudiantService.findDisponibles());
     }
 
     @ResponseBody

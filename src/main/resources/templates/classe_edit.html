@@ -2,53 +2,226 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier classe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier la Classe - Projet NFP121</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #2c3e50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand { font-weight: 700; color: #ecf0f1 !important; }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            background-color: #2ecc71; /* Vert Classes */
+            color: white;
+            padding: 20px 25px;
+            border-bottom: none;
+        }
+
+        /* Styles des boites de listes */
+        .list-box-container {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 100%;
+            border: 1px solid #dee2e6;
+        }
+
+        .list-box-header {
+            padding: 10px 15px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .list-box-header.remove { background-color: #ffebee; color: #c62828; border-bottom: 2px solid #ef9a9a; }
+        .list-box-header.add { background-color: #e8f5e9; color: #2e7d32; border-bottom: 2px solid #a5d6a7; }
+
+        .list-scroll-area {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        /* Items des listes */
+        .list-item {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background 0.2s;
+            border-radius: 5px;
+        }
+        .list-item:hover { background-color: #f8f9fa; }
+
+        /* Checkboxes personnalisées pour l'action */
+        .form-check-input.check-remove:checked {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .form-check-input.check-add:checked {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-submit {
+            background-color: #2ecc71;
+            border: none;
+            padding: 12px 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        .alert-empty {
+            font-size: 0.9rem;
+            padding: 15px;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
-<h1 th:text="'Modifier : ' + ${classe.denomination}">Modifier</h1>
-
-<form th:action="@{/classes/{id}/edit(id=${classe.id})}" method="post">
-
-    <div>
-        <label>Dénomination :</label>
-        <input type="text" name="denomination" th:value="${classe.denomination}" required>
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="fas fa-school me-2"></i>School Manager
+        </a>
+        <div class="ms-auto">
+            <a th:href="@{/classes}" class="text-white text-decoration-none">
+                <i class="fas fa-arrow-left me-1"></i> Retour liste
+            </a>
+        </div>
     </div>
+</nav>
 
-    <hr>
+<div class="container mb-5">
 
-    <h3>Étudiants actuellement dans la classe</h3>
-    <div th:if="${#lists.isEmpty(etudiantsClasse)}">
-        Aucun étudiant dans cette classe.
+    <div class="form-card card col-lg-10">
+        <div class="card-header text-center">
+            <h2 class="m-0">
+                <i class="fas fa-edit me-2"></i>Modification de la Classe
+            </h2>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+            <form th:action="@{/classes/{id}/edit(id=${classe.id})}" method="post">
+
+                <div class="mb-5">
+                    <label for="denomination" class="form-label fw-bold text-secondary">Nom de la classe</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white text-success"><i class="fas fa-chalkboard"></i></span>
+                        <input type="text" class="form-control" id="denomination" name="denomination"
+                               th:value="${classe.denomination}" required>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="list-box-container">
+                            <div class="list-box-header remove">
+                                <i class="fas fa-user-minus me-2"></i> Élèves à retirer
+                            </div>
+
+                            <div class="list-scroll-area">
+                                <div th:if="${#lists.isEmpty(etudiantsClasse)}" class="alert-empty">
+                                    <i class="fas fa-info-circle me-1"></i> Aucun étudiant actuellement dans cette classe.
+                                </div>
+
+                                <div th:each="e : ${etudiantsClasse}" class="list-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input check-remove" type="checkbox" name="removeIds"
+                                               th:value="${e.id}" th:id="'remove-' + ${e.id}">
+                                        <label class="form-check-label w-100 cursor-pointer" th:for="'remove-' + ${e.id}" style="cursor: pointer;">
+                                            <span class="text-danger fw-medium">Retirer</span>
+                                            <span class="text-dark ms-1" th:text="${e.nom + ' ' + e.prenom}">Nom</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-text text-center mt-2 small text-danger">
+                            Cochez les cases pour <strong>enlever</strong> l'élève de la classe.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="list-box-container">
+                            <div class="list-box-header add">
+                                <i class="fas fa-user-plus me-2"></i> Élèves à ajouter
+                            </div>
+
+                            <div class="list-scroll-area">
+                                <div th:if="${#lists.isEmpty(disponibles)}" class="alert-empty">
+                                    <i class="fas fa-check-circle me-1"></i> Tous les étudiants ont déjà une classe.
+                                </div>
+
+                                <div th:each="e : ${disponibles}" class="list-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input check-add" type="checkbox" name="addIds"
+                                               th:value="${e.id}" th:id="'add-' + ${e.id}">
+                                        <label class="form-check-label w-100 cursor-pointer" th:for="'add-' + ${e.id}" style="cursor: pointer;">
+                                            <span class="text-success fw-medium">Ajouter</span>
+                                            <span class="text-dark ms-1" th:text="${e.nom + ' ' + e.prenom}">Nom</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-text text-center mt-2 small text-success">
+                            Cochez les cases pour <strong>intégrer</strong> l'élève dans la classe.
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-5">
+
+                <div class="d-flex justify-content-center">
+                    <a th:href="@{/classes}" class="btn btn-outline-secondary me-3 px-4">Annuler</a>
+                    <button type="submit" class="btn btn-primary btn-submit text-white shadow">
+                        <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
+</div>
 
-    <div th:each="e : ${etudiantsClasse}">
-        <label>
-            <input type="checkbox" name="removeIds" th:value="${e.id}">
-            Retirer : <span th:text="${e.nom + ' ' + e.prenom}"></span>
-        </label>
-        <br>
-    </div>
-
-    <hr>
-
-    <h3>Étudiants disponibles (sans classe)</h3>
-    <div th:if="${#lists.isEmpty(disponibles)}">
-        Aucun étudiant disponible.
-    </div>
-
-    <div th:each="e : ${disponibles}">
-        <label>
-            <input type="checkbox" name="addIds" th:value="${e.id}">
-            Ajouter : <span th:text="${e.nom + ' ' + e.prenom}"></span>
-        </label>
-        <br>
-    </div>
-
-    <button type="submit">Enregistrer</button>
-</form>
-
-<a th:href="@{/classes}">Retour</a>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

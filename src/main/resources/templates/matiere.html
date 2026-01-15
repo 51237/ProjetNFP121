@@ -1,52 +1,211 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Matières</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Matières - Projet NFP121</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #2c3e50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #ecf0f1 !important;
+        }
+
+        /* Thème Violet pour les Matières */
+        .text-purple { color: #6f42c1; }
+        .bg-purple-light { background-color: #f3e5f5; color: #6f42c1; }
+        .btn-purple { background-color: #6f42c1; color: white; border: none; }
+        .btn-purple:hover { background-color: #5a32a3; color: white; }
+
+        /* Card Content */
+        .content-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table { margin-bottom: 0; }
+        .table thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #eaeaea;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 15px 20px;
+        }
+        .table tbody td {
+            padding: 15px 20px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .table tbody tr:hover { background-color: #fcfcfc; }
+
+        /* Icone Matière */
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Bouton retour */
+        .btn-back {
+            background-color: #fff;
+            color: #2c3e50;
+            border: 1px solid #ced4da;
+            padding: 8px 20px;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        .btn-back:hover {
+            background-color: #e9ecef;
+            color: #2c3e50;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Liste des Matières</h1>
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="fas fa-school me-2"></i>School Manager
+        </a>
+        <div class="ms-auto">
+            <a th:href="@{/}" class="text-white text-decoration-none">
+                <i class="fas fa-home"></i> Accueil
+            </a>
+        </div>
+    </div>
+</nav>
 
-<p>
-    <a th:href="@{/matieres/new}">Créer Nouvelle matière</a>
-</p>
+<div class="container mb-5">
 
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Matières</li>
+        </ol>
+    </nav>
 
-<table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Dénomination</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <strong th:text="${error}">Erreur survenue</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
-    <tbody>
-    <tr th:each="m : ${matieres}">
-        <td th:text="${m.id}"></td>
-        <td th:text="${m.denomination}"></td>
+    <div class="content-card card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-book-open me-2 text-purple"></i>
+                Liste des Matières
+            </h2>
+            <a th:href="@{/matieres/new}" class="btn btn-purple btn-sm shadow-sm">
+                <i class="fas fa-plus me-1"></i> Nouvelle Matière
+            </a>
+        </div>
 
-        <td>
-            <button>
-                <a th:href="@{/matieres/{id}/edit(id=${m.id})}">Modifier</a>
-            </button>
-            |
-            <form th:action="@{/matieres/{id}/delete(id=${m.id})}"
-                  method="post"
-                  style="display:inline;">
-                <button type="submit"
-                        onclick="return confirm('Supprimer la matière ?')">
-                    Supprimer
-                </button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width: 80px;">#</th>
+                        <th scope="col">Dénomination</th>
+                        <th scope="col" class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="m : ${matieres}">
+                        <td class="text-muted fw-bold" th:text="${m.id}">1</td>
 
-<a th:href="@{/}">Retour</a>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="subject-icon bg-purple-light">
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                                <span class="fw-bold fs-5" th:text="${m.denomination}">Mathématiques</span>
+                            </div>
+                        </td>
 
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/matieres/{id}/edit(id=${m.id})}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <form th:action="@{/matieres/{id}/delete(id=${m.id})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger ms-1" title="Supprimer"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette matière ?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(matieres)}">
+                        <td colspan="3" class="text-center py-5 text-muted">
+                            <i class="fas fa-book fa-3x mb-3 d-block opac-50"></i>
+                            Aucune matière enregistrée.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a th:href="@{/}" class="btn btn-back">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

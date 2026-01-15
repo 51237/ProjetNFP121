@@ -25,12 +25,6 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/matieres")
-    public String AfficherMatieres(Model model) {
-        model.addAttribute("matieres", matiereService.findAll());
-        return "matiere";
-    }
-
     @GetMapping("/etudiants")
     public String AfficherEtudiants(Model model) {
         model.addAttribute("etudiants", etudiantService.findAll());

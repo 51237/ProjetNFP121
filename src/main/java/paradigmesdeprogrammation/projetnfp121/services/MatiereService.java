@@ -31,10 +31,28 @@ public class MatiereService {
         return matiereRepository.save(m);
     }
 
-    public boolean delete(Long id) {
-        if (devoirRepository.existsById(id)) return false;
-        matiereRepository.deleteById(id);
-        return true;
+    public Matiere create(Matiere matiere) {
+        return matiereRepository.save(matiere);
     }
 
+    public Matiere update(Long id, Matiere matiereDetails) {
+        Matiere matiere = matiereRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Matière inexistante"));
+
+        matiere.setDenomination(matiereDetails.getDenomination());
+        return matiereRepository.save(matiere);
+    }
+
+    public void delete(Long id) {
+        Matiere matiere = matiereRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Matière inexistante"));
+
+        long nbDevoirs = devoirRepository.countByIdmatiere(matiere);
+
+        if (nbDevoirs > 0) {
+            throw new RuntimeException("Impossible de supprimer : matière utilisée dans un devoir");
+        }
+
+        matiereRepository.delete(matiere);
+    }
 }

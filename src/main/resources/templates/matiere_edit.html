@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier Matière</title>
+</head>
+<body>
+
+<h1>Modifier une Matière</h1>
+
+<form th:action="@{/matieres/{id}/edit(id=${matiere.id})}" method="post">
+    <p>
+        <label>Dénomination :</label>
+        <input type="text" name="denomination" th:value="${matiere.denomination}" required>
+    </p>
+
+    <button type="submit">Enregistrer</button>
+    <a th:href="@{/matieres}">Annuler</a>
+</form>
+
+</body>
+</html>

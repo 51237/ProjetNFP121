@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle Matière</title>
+</head>
+<body>
+
+<h1>Créer une Matière</h1>
+
+<form th:action="@{/matieres}" method="post">
+    <p>
+        <label>Dénomination :</label>
+        <input type="text" name="denomination" required>
+    </p>
+
+    <button type="submit">Créer</button>
+    <a th:href="@{/matieres}">Annuler</a>
+</form>
+
+</body>
+</html>

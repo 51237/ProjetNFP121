@@ -1,27 +1,52 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Matières</title>
 </head>
 <body>
-<h1>Liste des matières</h1>
+
+<h1>Liste des Matières</h1>
+
+<p>
+    <a th:href="@{/matieres/new}">Créer Nouvelle matière</a>
+</p>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
 
 <table>
     <thead>
     <tr>
         <th>#</th>
         <th>Dénomination</th>
+        <th>Actions</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="m : ${matieres}">
         <td th:text="${m.id}"></td>
         <td th:text="${m.denomination}"></td>
+
+        <td>
+            <button>
+                <a th:href="@{/matieres/{id}/edit(id=${m.id})}">Modifier</a>
+            </button>
+            |
+            <form th:action="@{/matieres/{id}/delete(id=${m.id})}"
+                  method="post"
+                  style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('Supprimer la matière ?')">
+                    Supprimer
+                </button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
 
 <a th:href="@{/}">Retour</a>
+
 </body>
 </html>

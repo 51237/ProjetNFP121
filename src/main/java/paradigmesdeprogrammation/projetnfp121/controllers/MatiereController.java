@@ -2,6 +2,7 @@ package paradigmesdeprogrammation.projetnfp121.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import paradigmesdeprogrammation.projetnfp121.entities.Matiere;
@@ -10,38 +11,99 @@ import paradigmesdeprogrammation.projetnfp121.services.MatiereService;
 import java.util.List;
 import java.util.Optional;
 
-
-@RestController
-@RequestMapping("/api/matieres")
+@Controller
 public class MatiereController {
 
     private final MatiereService matiereService;
 
     public MatiereController(MatiereService matiereService) {
-
         this.matiereService = matiereService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Matiere>> getAllMatieres() {
+    // =========================
+    // VUES HTML (Thymeleaf)
+    // =========================
+
+    @GetMapping("/matieres")
+    public String afficherMatieres(Model model) {
+        model.addAttribute("matieres", matiereService.findAll());
+        return "matiere"; // templates/matiere.html
+    }
+
+    @GetMapping("/matieres/new")
+    public String formCreateMatiere(Model model) {
+        model.addAttribute("matiere", new Matiere());
+        return "matiere_new"; // templates/matiere_new.html
+    }
+
+    @PostMapping("/matieres")
+    public String createMatiere(@RequestParam("denomination") String denomination, Model model) {
+        Matiere m = new Matiere();
+        m.setDenomination(denomination);
+        matiereService.save(m);
+        return "redirect:/matieres";
+    }
+
+    @GetMapping("/matieres/{id}/edit")
+    public String formEditMatiere(@PathVariable Long id, Model model) {
+        Matiere matiere = matiereService.findById(id).orElseThrow();
+        model.addAttribute("matiere", matiere);
+        return "matiere_edit"; // templates/matiere_edit.html
+    }
+
+    @PostMapping("/matieres/{id}/edit")
+    public String updateMatiere(@PathVariable Long id,
+                                @RequestParam("denomination") String denomination) {
+
+        Matiere matiere = matiereService.findById(id).orElseThrow();
+        matiere.setDenomination(denomination);
+        matiereService.save(matiere);
+
+        return "redirect:/matieres";
+    }
+
+    @PostMapping("/matieres/{id}/delete")
+    public String deleteMatiere(@PathVariable Long id, Model model) {
+        try {
+            matiereService.delete(id); // applique la règle "pas si utilisée dans un devoir"
+            return "redirect:/matieres";
+        } catch (RuntimeException e) {
+            // On ré-affiche la liste avec un message d’erreur (simple)
+            model.addAttribute("matieres", matiereService.findAll());
+            model.addAttribute("error", e.getMessage());
+            return "matiere";
+        }
+    }
+
+    // =========================
+    // API (JSON) - même style que ClasseController
+    // =========================
+
+    @ResponseBody
+    @GetMapping("/api/matieres")
+    public ResponseEntity<List<Matiere>> apiGetAllMatieres() {
         return new ResponseEntity<>(matiereService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Matiere> createMatiere(@RequestBody Matiere matiere) {
+    @ResponseBody
+    @PostMapping("/api/matieres")
+    public ResponseEntity<Matiere> apiCreateMatiere(@RequestBody Matiere matiere) {
         Matiere matiereCreated = matiereService.save(matiere);
         return new ResponseEntity<>(matiereCreated, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Matiere> getMatiere(@PathVariable Long id) {
+    @ResponseBody
+    @GetMapping("/api/matieres/{id}")
+    public ResponseEntity<Matiere> apiGetMatiere(@PathVariable Long id) {
         Optional<Matiere> matiere = matiereService.findById(id);
-
-        return matiere.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return matiere
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Matiere> updateMatiere(@PathVariable Long id, @RequestBody Matiere matiereDetails) {
+    @ResponseBody
+    @PutMapping("/api/matieres/{id}")
+    public ResponseEntity<Matiere> apiUpdateMatiere(@PathVariable Long id, @RequestBody Matiere matiereDetails) {
         Optional<Matiere> matiere = matiereService.findById(id);
 
         if (matiere.isPresent()) {
@@ -54,15 +116,19 @@ public class MatiereController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMatiere(@PathVariable Long id) {
-        Optional<Matiere> matiere = matiereService.findById(id);
-
-        if (matiere.isPresent()) {
-            matiereService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+    @ResponseBody
+    @DeleteMapping("/api/matieres/{id}")
+    public ResponseEntity<?> apiDeleteMatiere(@PathVariable Long id) {
+        if (matiereService.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
+        try {
+            matiereService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Conflit : matière utilisée dans un devoir
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
 }

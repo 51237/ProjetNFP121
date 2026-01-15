@@ -22,4 +22,6 @@ public interface DevoirRepository extends JpaRepository<Devoir, Long> {
 
     @Override
     Optional<Devoir> findById(Long id);
+
+    long countByIdmatiere(Matiere idmatiere);
 }
